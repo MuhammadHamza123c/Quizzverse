@@ -174,6 +174,27 @@ class RoomManager:
 
             await self.broadcast_leaderboard(room_id)
 
+            if not is_correct and current_p.get("user_id"):
+                try:
+                    room = supabase.table("rooms").select("quiz_id").eq("id", room_id).single().execute()
+                    if room.data:
+                        qt = supabase.table("quizzes").select("title").eq("id", room.data["quiz_id"]).single().execute()
+                        supabase.table("flashcards").insert({
+                            "user_id": current_p["user_id"],
+                            "quiz_id": room.data["quiz_id"],
+                            "quiz_title": qt.data.get("title", "") if qt.data else "",
+                            "question_text": question.data["question_text"],
+                            "question_type": question.data.get("question_type", "mcq"),
+                            "options": question.data.get("options"),
+                            "correct_answer": question.data["correct_answer"],
+                            "user_wrong_answer": selected_answer,
+                            "explanation": question.data.get("explanation"),
+                            "difficulty": question.data.get("difficulty", "medium"),
+                            "reviewed": False,
+                        }).execute()
+                except Exception as e:
+                    print(f"[flashcard_gen] ERROR: {e}")
+
         elif msg_type == "skip_question":
             question_id = data.get("question_id")
 

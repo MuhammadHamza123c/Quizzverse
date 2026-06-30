@@ -99,6 +99,12 @@ export default function ReviewPage() {
         prev.map((c) => (c.id === card.id ? { ...c, reviewed: true } : c))
       )
     }
+    if (unreviewed.length > 0) {
+      const reviewedCount = flashcards.filter((c) => c.reviewed).length + unreviewed.length
+      api.achievements.check({ event: "flashcard_reviewed", data: { total_reviewed: reviewedCount } })
+        .then((res) => { if (res.new_achievements?.length > 0) setBadgePopup(res.new_achievements[0]) })
+        .catch(() => {})
+    }
   }
 
   const toggleGroup = (key: string) => {

@@ -222,8 +222,8 @@ export default function QuizPage() {
     setScore(finalScore)
     setResults(finalResults)
     setShowResult(true)
-    api.quizzes.complete({ score: s, total_questions: quiz.questions.length, quiz_id: quiz.quiz_id }).catch(() => {})
-    const wrong = r.filter((q: any) => !q.correct)
+    api.quizzes.complete({ score: finalScore, total_questions: quiz.questions.length, quiz_id: quiz.quiz_id }).catch(() => {})
+    const wrong = finalResults.filter((q: any) => !q.correct)
     if (wrong.length > 0) {
       api.flashcards.generate({
         wrong_answers: wrong.map((q: any) => ({
@@ -238,7 +238,7 @@ export default function QuizPage() {
         quiz_id: quiz.quiz_id,
       }).catch(() => {})
     }
-    api.achievements.check({ event: "quiz_complete", data: { score: s, total_questions: quiz.questions.length } })
+    api.achievements.check({ event: "quiz_complete", data: { score: finalScore, total_questions: quiz.questions.length } })
       .then((res) => { if (res.new_achievements?.length > 0) setBadgePopup(res.new_achievements[0]) })
       .catch(() => {})
   }
