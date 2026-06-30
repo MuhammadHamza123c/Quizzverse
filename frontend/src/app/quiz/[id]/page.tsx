@@ -282,10 +282,10 @@ export default function QuizDetail() {
           </div>
 
           <div className="flex gap-3">
-            <button onClick={handleExport} className="btn-ghost flex-1 flex items-center justify-center gap-2">
+            <button onClick={handleExport} className="btn-primary flex-1 flex items-center justify-center gap-2">
               <Download className="w-4 h-4" /> Export JSON
             </button>
-            <Link href="/quiz" className="btn-secondary flex-1 text-center">New Quiz</Link>
+            <Link href="/quiz" className="btn-primary flex-1 text-center">New Quiz</Link>
             <Link href="/dashboard" className="btn-primary flex-1 text-center">Dashboard</Link>
           </div>
         </div>

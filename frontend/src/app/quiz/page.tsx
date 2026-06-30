@@ -321,10 +321,10 @@ export default function QuizPage() {
           </div>
 
           <div className="flex gap-3">
-            <button onClick={() => handleExport(quiz.quiz_id)} className="btn-ghost flex-1 flex items-center justify-center gap-2">
+            <button onClick={() => handleExport(quiz.quiz_id)} className="btn-primary flex-1 flex items-center justify-center gap-2">
               <Download className="w-4 h-4" /> Export JSON
             </button>
-            <button onClick={() => { setQuiz(null); setShowResult(false) }} className="btn-secondary flex-1">
+            <button onClick={() => { setQuiz(null); setShowResult(false) }} className="btn-primary flex-1 text-center">
               New Quiz
             </button>
             <Link href="/dashboard" className="btn-primary flex-1 text-center">
