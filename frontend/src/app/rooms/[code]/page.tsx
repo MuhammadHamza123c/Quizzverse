@@ -191,6 +191,12 @@ function RoomContent() {
     return () => clearInterval(timerRef.current)
   }, [currentQ, answerResult])
 
+  // Auto-advance when timer expires
+  useEffect(() => {
+    if (timeLeft !== 0 || !currentQ || answerResult) return
+    handleSkip()
+  }, [timeLeft, currentQ, answerResult])
+
   const handleNextQuestion = useCallback(() => {
     if (nextQuestionSentRef.current) return
     nextQuestionSentRef.current = true
@@ -640,9 +646,11 @@ function RoomContent() {
                         disabled={!!answerResult}
                         className={`py-4 px-6 rounded-xl border text-lg font-semibold transition-all ${
                           selectedAnswer === key
-                            ? answerResult?.correct
-                              ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300"
-                              : "border-red-500/40 bg-red-500/10 text-red-300"
+                            ? answerResult
+                              ? answerResult.correct
+                                ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300"
+                                : "border-red-500/40 bg-red-500/10 text-red-300"
+                              : "border-amber-500/40 bg-amber-500/10 text-amber-300"
                             : "border-white/5 bg-white/[0.02] hover:bg-white/[0.04] hover:border-purple-500/25 text-gray-300"
                         } disabled:opacity-60 disabled:cursor-not-allowed`}
                       >
@@ -662,9 +670,11 @@ function RoomContent() {
                       disabled={!!answerResult}
                       className={`w-full text-left p-4 rounded-xl border transition-all duration-200 ${
                         selectedAnswer === key
-                          ? answerResult?.correct
-                            ? "border-purple-500 bg-purple-500/10 shadow-sm shadow-purple-500/10"
-                            : "border-red-500/40 bg-red-500/10 text-red-300"
+                          ? answerResult
+                            ? answerResult.correct
+                              ? "border-purple-500 bg-purple-500/10 shadow-sm shadow-purple-500/10"
+                              : "border-red-500/40 bg-red-500/10 text-red-300"
+                            : "border-amber-500/40 bg-amber-500/10 text-amber-300"
                           : answerResult && (key === answerResult.correct_answer || val === answerResult.correct_answer)
                             ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300"
                             : "border-purple-500/10 hover:border-purple-500/30 bg-purple-500/[0.02] hover:bg-purple-500/5"
