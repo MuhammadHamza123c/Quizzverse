@@ -15,12 +15,7 @@ interface Message {
 }
 
 function formatTime(ts: number) {
-  const d = new Date(ts)
-  const now = new Date()
-  const diff = now.getTime() - d.getTime()
-  if (diff < 60000) return "just now"
-  if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`
-  return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+  return new Date(ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
 }
 
 const suggestions = [
