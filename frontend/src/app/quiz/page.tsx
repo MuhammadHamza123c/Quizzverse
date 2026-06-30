@@ -555,7 +555,7 @@ export default function QuizPage() {
           {/* Quick Topics */}
           <div>
             <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 block">Quick Topics</label>
-            <div className="grid grid-cols-4 gap-2.5">
+            <div className="grid grid-cols-6 gap-2">
               {[
                 { label: "Science", icon: Atom, gradient: "from-cyan-500/10 to-blue-600/5", border: "hover:border-cyan-500/25", text: "text-cyan-400", bg: "bg-cyan-500/10" },
                 { label: "Math", icon: Calculator, gradient: "from-purple-500/10 to-purple-600/5", border: "hover:border-purple-500/25", text: "text-purple-400", bg: "bg-purple-500/10" },
