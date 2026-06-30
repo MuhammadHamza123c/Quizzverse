@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from db.supabase_client import supabase
 from api.dependencies import get_current_user
-from services.ai_service import generate_quiz, generate_quiz_from_text, generate_title_from_text
+from services.ai_service import generate_quiz, generate_quiz_from_text, generate_title_from_text, extract_fallback_title
 import uuid
 import random
 import string
@@ -122,12 +122,16 @@ async def create_room_from_document(req: CreateDocumentRoomRequest, user=Depends
     if document.data["user_id"] != user.id:
         raise HTTPException(403, "You don't own this document")
 
+    try:
+        ai_title = generate_title_from_text(document.data["content_text"])
+    except:
+        ai_title = extract_fallback_title(document.data["content_text"])
+
     questions_data = generate_quiz_from_text(document.data["content_text"], req.num_questions, req.difficulty)
     if not questions_data:
         raise HTTPException(500, "Failed to generate quiz questions from document")
 
     quiz_id = str(uuid.uuid4())
-    ai_title = generate_title_from_text(document.data["content_text"])
     supabase.table("quizzes").insert({
         "id": quiz_id,
         "title": ai_title,

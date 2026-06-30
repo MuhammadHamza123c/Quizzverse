@@ -67,12 +67,21 @@ def generate_title_from_text(text: str) -> str:
         )
         title = response.choices[0].message.content
         if not title:
-            return "Untitled Quiz"
+            return extract_fallback_title(text)
         title = title.strip().strip('"').strip("'").strip(".")
-        return title if len(title) > 2 else "Untitled Quiz"
+        return title if len(title) > 2 else extract_fallback_title(text)
     except Exception as e:
         print(f"[generate_title] Error: {e}")
-        return "Untitled Quiz"
+        return extract_fallback_title(text)
+
+
+def extract_fallback_title(text: str) -> str:
+    words = text.strip().split()
+    if len(words) >= 4:
+        return " ".join(words[:4]).strip(".,;:!?") + " Quiz"
+    if len(words) >= 2:
+        return " ".join(words[:2]).strip(".,;:!?") + " Quiz"
+    return "Untitled Quiz"
 
 
 def get_hint(question_text: str, question_type: str, options: dict | None, correct_answer: str) -> str:

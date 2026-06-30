@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File, Depends
 from db.supabase_client import supabase
 from services.doc_parser import parse_document
-from services.ai_service import generate_quiz_from_text, generate_title_from_text
+from services.ai_service import generate_quiz_from_text, generate_title_from_text, extract_fallback_title
 from api.dependencies import get_current_user
 import uuid
 
@@ -59,12 +59,16 @@ async def create_quiz_from_document(document_id: str, num_questions: int = 5, di
         raise HTTPException(403, "You don't own this document")
 
     try:
+        ai_title = generate_title_from_text(doc.data["content_text"])
+    except:
+        ai_title = extract_fallback_title(doc.data["content_text"])
+
+    try:
         questions_data = generate_quiz_from_text(doc.data["content_text"], num_questions, difficulty)
     except Exception as e:
         raise HTTPException(500, f"AI generation failed: {str(e)}")
 
     quiz_id = str(uuid.uuid4())
-    ai_title = generate_title_from_text(doc.data["content_text"])
     quiz_payload = {
         "id": quiz_id,
         "title": ai_title,
