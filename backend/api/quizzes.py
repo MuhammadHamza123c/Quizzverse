@@ -153,58 +153,7 @@ async def export_quiz(quiz_id: str):
     }
 
 
-class ImportQuestion(BaseModel):
-    question_text: str
-    question_type: str = "mcq"
-    options: dict | None = None
-    correct_answer: str
-    explanation: str = ""
-    difficulty: str = "medium"
 
-
-class QuizImportRequest(BaseModel):
-    title: str = ""
-    topic: str = ""
-    difficulty: str = "medium"
-    questions: list[ImportQuestion]
-
-
-@router.post("/import")
-async def import_quiz(req: QuizImportRequest, user=Depends(get_current_user)):
-    if not req.questions:
-        raise HTTPException(400, "At least one question is required")
-
-    quiz_id = str(uuid.uuid4())
-    title = req.title or f"Quiz: {req.topic}" if req.topic else "Imported Quiz"
-    topic = req.topic or title
-
-    quiz_payload = {
-        "id": quiz_id,
-        "title": title,
-        "topic": topic,
-        "difficulty": req.difficulty,
-        "question_count": len(req.questions),
-        "source": "imported",
-        "created_by": user.id,
-    }
-
-    try:
-        supabase.table("quizzes").insert(quiz_payload).execute()
-        for i, q in enumerate(req.questions):
-            supabase.table("questions").insert({
-                "quiz_id": quiz_id,
-                "question_text": q.question_text,
-                "question_type": q.question_type,
-                "options": q.options,
-                "correct_answer": q.correct_answer,
-                "explanation": q.explanation,
-                "difficulty": q.difficulty,
-                "order_index": i,
-            }).execute()
-    except APIError as e:
-        raise HTTPException(500, f"Failed to save quiz: {str(e)}")
-
-    return {"quiz_id": quiz_id, "title": title, "question_count": len(req.questions)}
 
 
 @router.delete("/{quiz_id}")

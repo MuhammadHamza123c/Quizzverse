@@ -46,8 +46,7 @@ export const api = {
     judgeAnswer: (data: { question_text: string; correct_answer: string; user_answer: string; question_type?: string }) =>
       request("/api/quizzes/judge-answer", { method: "POST", body: JSON.stringify(data) }),
     export: (id: string) => request(`/api/quizzes/${id}/export`),
-    import: (data: { title?: string; topic?: string; difficulty?: string; questions: any[] }) =>
-      request("/api/quizzes/import", { method: "POST", body: JSON.stringify(data) }),
+
   },
   documents: {
     list: () => request("/api/documents/"),

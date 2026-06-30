@@ -6,7 +6,7 @@ import Link from "next/link"
 import { api } from "@/lib/api"
 import BadgePopup from "@/components/BadgePopup"
 import { supabase } from "@/lib/supabase"
-import { Brain, Sparkles, Loader2, AlertCircle, ArrowLeft, CheckCircle2, Zap, Clock, Target, Lightbulb, Atom, Globe, Microscope, ScrollText, Calculator, FlaskConical, Landmark, SkipForward, Dna, Telescope, Palette, Music, Dumbbell, Leaf, Cpu, Briefcase, BookOpen, HeartPulse, X, Wrench, Stethoscope, PawPrint, Languages, Bot, Download, Upload } from "lucide-react"
+import { Brain, Sparkles, Loader2, AlertCircle, ArrowLeft, CheckCircle2, Zap, Clock, Target, Lightbulb, Atom, Globe, Microscope, ScrollText, Calculator, FlaskConical, Landmark, SkipForward, Dna, Telescope, Palette, Music, Dumbbell, Leaf, Cpu, Briefcase, BookOpen, HeartPulse, X, Wrench, Stethoscope, PawPrint, Languages, Bot, Download } from "lucide-react"
 
 export default function QuizPage() {
   const [topic, setTopic] = useState("")
@@ -57,29 +57,6 @@ export default function QuizPage() {
       a.click()
       URL.revokeObjectURL(url)
     } catch {}
-  }
-
-  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    try {
-      const text = await file.text()
-      const data = JSON.parse(text)
-      if (!data.questions || !Array.isArray(data.questions) || data.questions.length === 0) {
-        alert("Invalid quiz file: must contain a 'questions' array.")
-        return
-      }
-      await api.quizzes.import({
-        title: data.title,
-        topic: data.topic,
-        difficulty: data.difficulty || "medium",
-        questions: data.questions,
-      })
-      api.quizzes.list().then(setRecentQuizzes).catch(() => {})
-    } catch (err) {
-      alert("Failed to import quiz: " + (err instanceof Error ? err.message : "Invalid file"))
-    }
-    e.target.value = ""
   }
 
   const handleGenerate = async (e: React.FormEvent) => {
@@ -730,12 +707,6 @@ export default function QuizPage() {
             <div className="flex items-center gap-2 mb-4">
               <Clock className="w-4 h-4 text-purple-400" />
               <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Recent Quizzes</h2>
-              <div className="ml-auto flex items-center gap-2">
-                <label className="btn-ghost text-xs px-3 py-1.5 rounded-lg cursor-pointer flex items-center gap-1.5">
-                  <Upload className="w-3.5 h-3.5" /> Import
-                  <input type="file" accept=".json" onChange={handleImport} className="hidden" />
-                </label>
-              </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               {recentQuizzes.slice(0, 6).map((q: any) => (
