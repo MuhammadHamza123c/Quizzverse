@@ -19,10 +19,10 @@ function formatTime(ts: number) {
 }
 
 const suggestions = [
-  { icon: Lightbulb, label: "Explain like I'm 5", text: "Explain how neural networks work like I'm five years old" },
-  { icon: Zap, label: "Compare concepts", text: "What's the difference between SQL and NoSQL databases?" },
-  { icon: BookOpen, label: "Create a cheat sheet", text: "Create a one-page cheat sheet for Python list and dict methods" },
-  { icon: Globe, label: "Make a roadmap", text: "Create a 3-month study roadmap for learning web development" },
+  { icon: Lightbulb, label: "Explain a concept", text: "Explain the concept of quantum computing in simple terms" },
+  { icon: BookOpen, label: "Practice questions", text: "Generate 5 quiz questions about World War II" },
+  { icon: Globe, label: "Summarize topic", text: "Give me a quick summary of the French Revolution" },
+  { icon: Zap, label: "Study tips", text: "What are the best techniques for memorizing scientific terms?" },
 ]
 
 export default function ChatPage() {
