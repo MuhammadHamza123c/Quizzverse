@@ -8,7 +8,7 @@ import { api } from "@/lib/api"
 import BadgePopup from "@/components/BadgePopup"
 import {
   Loader2, RotateCcw, CheckCircle2, Circle, ChevronDown,
-  ChevronRight, AlertCircle, Filter
+  ChevronRight, AlertCircle, Filter, BookOpen, Sparkles,
 } from "lucide-react"
 
 interface Flashcard {
@@ -205,126 +205,186 @@ export default function ReviewPage() {
             </p>
           </div>
         ) : (
-          <div className="space-y-4">
-            {Object.entries(grouped).map(([quizTitle, cards]) => (
-              <div
-                key={quizTitle}
-                className="rounded-2xl border border-white/[0.06] bg-white/[0.02] overflow-hidden"
-              >
+          <div className="space-y-6">
+            {Object.entries(grouped).map(([quizTitle, cards], gi) => (
+              <div key={quizTitle}>
+                {/* Separator between groups */}
+                {gi > 0 && <div className="h-px bg-gradient-to-r from-transparent via-purple-500/10 to-transparent mb-6" />}
+
                 {/* Group header */}
-                <button
-                  onClick={() => toggleGroup(quizTitle)}
-                  className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-white/[0.02] transition-colors"
-                >
+                <div className="flex items-center justify-between mb-3 px-1">
                   <div className="flex items-center gap-2.5">
-                    {expanded[quizTitle] !== false ? (
-                      <ChevronDown className="w-4 h-4 text-gray-500" />
-                    ) : (
-                      <ChevronRight className="w-4 h-4 text-gray-500" />
-                    )}
-                    <span className="text-sm font-medium text-gray-200">{quizTitle}</span>
-                    <span className="text-xs text-gray-500">
-                      ({cards.length} wrong{cards.filter((c) => c.reviewed).length > 0 ? `, ${cards.filter((c) => c.reviewed).length} reviewed` : ""})
-                    </span>
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500/15 to-cyan-500/10 border border-purple-500/10 flex items-center justify-center">
+                      <BookOpen className="w-4 h-4 text-purple-400" />
+                    </div>
+                    <h3 className="text-sm font-semibold text-gray-200">{quizTitle}</h3>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 font-medium">
+                        {cards.filter((c) => !c.reviewed).length} left
+                      </span>
+                      <span className="text-[11px] text-gray-600">
+                        {cards.filter((c) => c.reviewed).length}/{cards.length} reviewed
+                      </span>
+                    </div>
                   </div>
                   {cards.some((c) => !c.reviewed) && (
                     <button
-                      onClick={(e) => { e.stopPropagation(); handleMarkAllReviewed(cards) }}
-                      className="text-xs text-purple-400 hover:text-purple-300 font-medium px-3 py-1.5 rounded-lg hover:bg-purple-500/10 transition-all"
+                      onClick={() => handleMarkAllReviewed(cards)}
+                      className="flex items-center gap-1.5 text-[11px] text-purple-400 hover:text-purple-300 font-medium px-3 py-1.5 rounded-lg hover:bg-purple-500/10 transition-all"
                     >
+                      <Sparkles className="w-3 h-3" />
                       Mark All Reviewed
                     </button>
                   )}
-                </button>
+                </div>
 
                 {/* Cards */}
-                {(expanded[quizTitle] !== false) && (
-                  <div className="divide-y divide-white/[0.04]">
-                    {cards.map((card) => (
-                      <div key={card.id} className="px-5 py-4">
-                        <div className="flex items-start gap-3">
-                          <div className="flex-1 min-w-0">
-                            {/* Question */}
-                            <p className="text-sm text-gray-200 mb-3 leading-relaxed">
-                              {card.question_text}
-                            </p>
-
-                            {/* Options */}
-                            {card.options ? (
-                              <div className="space-y-1.5 mb-3">
-                                {Object.entries(card.options).map(([key, val]) => {
-                                  const isUserWrong = key === card.user_wrong_answer
-                                  const isCorrect = key === card.correct_answer
-                                  let bgClass = "bg-white/[0.03] text-gray-500"
-                                  let label = ""
-                                  if (isCorrect && isUserWrong) {
-                                    bgClass = "bg-amber-500/10 text-amber-300"
-                                    label = "correct + yours"
-                                  } else if (isCorrect) {
-                                    bgClass = "bg-emerald-500/8 text-emerald-300"
-                                    label = "correct"
-                                  } else if (isUserWrong) {
-                                    bgClass = "bg-red-500/8 text-red-300"
-                                    label = "your answer"
-                                  }
-                                  return (
-                                    <div
-                                      key={key}
-                                      className={`flex items-center justify-between text-xs px-3 py-2 rounded-lg ${bgClass}`}
-                                    >
-                                      <span>
-                                        <span className="font-medium mr-1.5">{key}.</span>
-                                        {val}
-                                      </span>
-                                      {label && (
-                                        <span className="text-[10px] opacity-70 ml-2 shrink-0">({label})</span>
-                                      )}
-                                    </div>
-                                  )
-                                })}
-                              </div>
-                            ) : (
-                              <div className="flex items-center gap-3 text-xs mb-3">
-                                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-red-500/8 text-red-300">
-                                  <AlertCircle className="w-3 h-3" />
-                                  Your answer: {card.user_wrong_answer || "(empty)"}
-                                </div>
-                                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-500/8 text-emerald-300">
-                                  <CheckCircle2 className="w-3 h-3" />
-                                  Correct: {card.correct_answer}
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Explanation */}
-                            {card.explanation && (
-                              <p className="text-xs text-gray-500 italic leading-relaxed">
-                                {card.explanation}
-                              </p>
-                            )}
-                          </div>
-
-                          {/* Review toggle */}
-                          <button
-                            onClick={() => handleToggleReview(card.id)}
-                            className={`shrink-0 w-9 h-9 rounded-lg flex items-center justify-center transition-all ${
+                <div className="space-y-2">
+                  {cards.map((card, ci) => {
+                    const hasOptions = card.options && Object.keys(card.options).length > 0
+                    return (
+                      <div
+                        key={card.id}
+                        className={`group relative rounded-xl border-l-4 transition-all ${
+                          card.reviewed
+                            ? "border-l-emerald-500/30 bg-white/[0.015] border border-white/[0.04] hover:border-emerald-500/10"
+                            : "border-l-rose-500/40 bg-white/[0.02] border border-white/[0.06] hover:border-rose-500/15 hover:bg-white/[0.03]"
+                        }`}
+                      >
+                        <div className="p-4 pl-4">
+                          <div className="flex items-start gap-3">
+                            {/* Wrong answer indicator */}
+                            <div className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center mt-0.5 ${
                               card.reviewed
-                                ? "bg-emerald-500/15 text-emerald-400"
-                                : "text-gray-500 hover:text-emerald-400 hover:bg-white/[0.04]"
-                            }`}
-                            title={card.reviewed ? "Mark unreviewed" : "Mark reviewed"}
-                          >
-                            {card.reviewed ? (
-                              <CheckCircle2 className="w-4 h-4" />
-                            ) : (
-                              <Circle className="w-4 h-4" />
-                            )}
-                          </button>
+                                ? "bg-emerald-500/10"
+                                : "bg-rose-500/10"
+                            }`}>
+                              {card.reviewed ? (
+                                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                              ) : (
+                                <AlertCircle className="w-4 h-4 text-rose-400" />
+                              )}
+                            </div>
+
+                            <div className="flex-1 min-w-0">
+                              {/* Question */}
+                              <p className="text-sm text-gray-200 mb-2.5 leading-relaxed font-medium">
+                                {card.question_text}
+                              </p>
+
+                              {/* Options */}
+                              {hasOptions ? (
+                                <div className="space-y-1 mb-2.5">
+                                  {Object.entries(card.options!).map(([key, val]) => {
+                                    const isUserWrong = key === card.user_wrong_answer
+                                    const isCorrect = key === card.correct_answer
+                                    let bgClass = "bg-white/[0.02] text-gray-500 border border-white/[0.04]"
+                                    let ringClass = ""
+                                    let label = ""
+                                    let labelColor = ""
+                                    if (isCorrect && isUserWrong) {
+                                      bgClass = "bg-amber-500/8 text-amber-200 border border-amber-500/15"
+                                      ringClass = "ring-1 ring-amber-500/20"
+                                      label = "your answer · correct"
+                                      labelColor = "text-amber-400"
+                                    } else if (isCorrect) {
+                                      bgClass = "bg-emerald-500/8 text-emerald-200 border border-emerald-500/15"
+                                      ringClass = "ring-1 ring-emerald-500/20"
+                                      label = "correct answer"
+                                      labelColor = "text-emerald-400"
+                                    } else if (isUserWrong) {
+                                      bgClass = "bg-red-500/8 text-red-200 border border-red-500/15"
+                                      ringClass = "ring-1 ring-red-500/20"
+                                      label = "your answer"
+                                      labelColor = "text-red-400"
+                                    }
+                                    return (
+                                      <div
+                                        key={key}
+                                        className={`flex items-center justify-between text-xs px-3 py-2 rounded-lg ${bgClass} ${ringClass}`}
+                                      >
+                                        <span>
+                                          <span className="font-semibold mr-1.5">{key}.</span>
+                                          {val}
+                                        </span>
+                                        {label && (
+                                          <span className={`text-[10px] font-medium ml-2 shrink-0 ${labelColor}`}>
+                                            {label}
+                                          </span>
+                                        )}
+                                      </div>
+                                    )
+                                  })}
+                                </div>
+                              ) : (
+                                <div className="flex flex-wrap items-center gap-2 mb-2.5">
+                                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-red-500/8 border border-red-500/10 text-red-300 text-xs">
+                                    <AlertCircle className="w-3 h-3" />
+                                    <span className="font-medium">You:</span> {card.user_wrong_answer || "(empty)"}
+                                  </div>
+                                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-500/8 border border-emerald-500/10 text-emerald-300 text-xs">
+                                    <CheckCircle2 className="w-3 h-3" />
+                                    <span className="font-medium">Correct:</span> {card.correct_answer}
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Explanation */}
+                              {card.explanation && (
+                                <div className="mt-2.5 pt-2.5 border-t border-white/[0.04]">
+                                  <p className="text-xs text-gray-500 leading-relaxed">
+                                    <span className="text-gray-600 font-medium">Explanation: </span>
+                                    {card.explanation}
+                                  </p>
+                                </div>
+                              )}
+
+                              {/* Timestamp + difficulty row */}
+                              <div className="flex items-center gap-3 mt-2.5">
+                                <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${
+                                  card.difficulty === "easy"
+                                    ? "bg-emerald-500/8 text-emerald-400"
+                                    : card.difficulty === "hard"
+                                      ? "bg-red-500/8 text-red-400"
+                                      : "bg-amber-500/8 text-amber-400"
+                                }`}>
+                                  {card.difficulty}
+                                </span>
+                                {card.created_at && (
+                                  <span className="text-[10px] text-gray-600">
+                                    {new Date(card.created_at).toLocaleDateString()}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Review toggle */}
+                            <button
+                              onClick={() => handleToggleReview(card.id)}
+                              className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+                                card.reviewed
+                                  ? "bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/20"
+                                  : "text-gray-500 hover:text-emerald-400 hover:bg-white/[0.06] hover:ring-1 hover:ring-emerald-500/20"
+                              }`}
+                              title={card.reviewed ? "Mark unreviewed" : "Mark reviewed"}
+                            >
+                              {card.reviewed ? (
+                                <CheckCircle2 className="w-5 h-5" />
+                              ) : (
+                                <Circle className="w-5 h-5" />
+                              )}
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Hover number badge */}
+                        <div className="absolute top-2 right-12 text-[10px] text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity select-none pointer-events-none">
+                          #{ci + 1}
                         </div>
                       </div>
-                    ))}
-                  </div>
-                )}
+                    )
+                  })}
+                </div>
               </div>
             ))}
           </div>
