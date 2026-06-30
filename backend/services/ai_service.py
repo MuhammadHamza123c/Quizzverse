@@ -144,52 +144,6 @@ def judge_answer(question_text: str, correct_answer: str, user_answer: str, ques
         return False
 
 
-def generate_suggestions() -> list[dict]:
-    prompt = (
-        "Generate 4 diverse suggestion objects for a chat assistant. "
-        "Each object must have:\n"
-        '- "label": a short action phrase (1-3 words, title case, no punctuation)\n'
-        '- "text": a complete user prompt (10-20 words, a question or request)\n'
-        "Cover different categories: one about learning/explaining, one about creative writing, "
-        "one about practical advice, one about fun/curiosity. "
-        "Make them interesting and varied — avoid generic school topics.\n\n"
-        "Return ONLY a valid JSON array, no other text:\n"
-        '[{"label": "...", "text": "..."}, ...]'
-    )
-    try:
-        response = client.chat.completions.create(
-            model="openai/gpt-oss-120b",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.9,
-            frequency_penalty=0.5,
-            presence_penalty=0.5,
-            max_tokens=500,
-        )
-        content = response.choices[0].message.content.strip()
-        # strip markdown code fences if present
-        if content.startswith("```"):
-            content = content.split("\n", 1)[-1]
-            content = content.rsplit("\n", 1)[0] if content.endswith("```") else content
-            if content.endswith("```"):
-                content = content[:-3].strip()
-        data = json.loads(content)
-        if isinstance(data, list) and len(data) == 4:
-            return data
-        return _default_suggestions()
-    except Exception as e:
-        print(f"[generate_suggestions] Error: {e}")
-        return _default_suggestions()
-
-
-def _default_suggestions() -> list[dict]:
-    return [
-        {"label": "Explain Like I'm 5", "text": "Explain how neural networks work like I'm five years old"},
-        {"label": "Compare Concepts", "text": "What's the difference between SQL and NoSQL databases?"},
-        {"label": "Cheat Sheet", "text": "Create a one-page cheat sheet for Python list and dict methods"},
-        {"label": "Study Roadmap", "text": "Create a 3-month study roadmap for learning web development"},
-    ]
-
-
 def generate_quiz_from_text(text: str, num_questions: int = 5, difficulty: str = "medium"):
     max_chars = 6000
     trimmed_text = text[:max_chars]

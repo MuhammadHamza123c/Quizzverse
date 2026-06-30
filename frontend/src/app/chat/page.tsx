@@ -15,11 +15,15 @@ interface Message {
 }
 
 function formatTime(ts: number) {
-  return new Date(ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }
-)
+  return new Date(ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
 }
 
-const iconList = [Lightbulb, Zap, BookOpen, Globe]
+const suggestions = [
+  { icon: Lightbulb, label: "Explain like I'm 5", text: "Explain how neural networks work like I'm five years old" },
+  { icon: Zap, label: "Compare concepts", text: "What's the difference between SQL and NoSQL databases?" },
+  { icon: BookOpen, label: "Create a cheat sheet", text: "Create a one-page cheat sheet for Python list and dict methods" },
+  { icon: Globe, label: "Make a roadmap", text: "Create a 3-month study roadmap for learning web development" },
+]
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([])
@@ -31,7 +35,6 @@ export default function ChatPage() {
   const [dragOver, setDragOver] = useState(false)
   const [pendingFile, setPendingFile] = useState<File | null>(null)
   const [profile, setProfile] = useState<any>(null)
-  const [suggestions, setSuggestions] = useState<{ icon: any; label: string; text: string }[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
@@ -47,16 +50,6 @@ export default function ChatPage() {
         try { setProfile(await api.users.getProfile()) } catch {}
       }
     })
-    api.chat.suggestions().then((res) => {
-      const iconList = [Lightbulb, Zap, BookOpen, Globe]
-      setSuggestions(
-        (res.suggestions || []).map((s: any, i: number) => ({
-          icon: iconList[i % iconList.length],
-          label: s.label,
-          text: s.text,
-        }))
-      )
-    }).catch(() => {})
   }, [router])
 
   useEffect(() => {

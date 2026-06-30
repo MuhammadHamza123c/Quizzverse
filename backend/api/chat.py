@@ -3,7 +3,6 @@ from pydantic import BaseModel
 from api.dependencies import get_current_user
 from services.chat_service import chat_with_context, transcribe_audio
 from services.doc_parser import parse_document
-from services.ai_service import generate_suggestions
 
 router = APIRouter(prefix="/api/chat", tags=["Chat"])
 
@@ -26,16 +25,6 @@ async def chat_message(req: ChatRequest, user=Depends(get_current_user)):
         return {"response": response, "role": "assistant"}
     except Exception as e:
         raise HTTPException(500, f"AI chat failed: {str(e)}")
-
-
-@router.get("/suggestions")
-async def chat_suggestions(user=Depends(get_current_user)):
-    try:
-        suggestions = generate_suggestions()
-        return {"suggestions": suggestions}
-    except Exception as e:
-        from services.ai_service import _default_suggestions
-        return {"suggestions": _default_suggestions()}
 
 
 @router.post("/upload")
