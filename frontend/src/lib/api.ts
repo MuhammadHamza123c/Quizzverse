@@ -100,6 +100,7 @@ export const api = {
       request("/api/livekit/token", { method: "POST", body: JSON.stringify(data) }),
   },
   chat: {
+    suggestions: () => request("/api/chat/suggestions"),
     message: (data: { messages: { role: string; content: string }[]; profile?: string }) =>
       request("/api/chat/message", { method: "POST", body: JSON.stringify(data) }),
     upload: async (file: File) => {
