@@ -8,7 +8,16 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "QuizzVerse - AI-Powered Quiz Platform",
   description: "Create, play, and compete in AI-generated quizzes",
-  icons: { icon: [{ url: "/logo.png", sizes: "any" }] },
+  icons: {
+    icon: [
+      { url: "/logo.png", sizes: "32x32", type: "image/png" },
+      { url: "/logo.png", sizes: "64x64", type: "image/png" },
+      { url: "/logo.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [
+      { url: "/logo.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -76,8 +76,8 @@ export default function Sidebar() {
       >
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 h-16 px-4 border-b border-white/5 shrink-0">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center shrink-0">
-            <Sparkles className="w-4 h-4 text-white" />
+          <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 overflow-hidden">
+            <img src="/logo.png" alt="QuizzVerse" className="w-8 h-8 object-contain" />
           </div>
           <span className={`text-lg font-bold gradient-text whitespace-nowrap transition-opacity duration-300 ${
             hovered ? "opacity-100" : "opacity-0 pointer-events-none"
