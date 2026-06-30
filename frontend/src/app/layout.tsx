@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "QuizzVerse - AI-Powered Quiz Platform",
+  title: "QuizzVerse",
   description: "Create, play, and compete in AI-generated quizzes",
   icons: {
     icon: [
