@@ -20,7 +20,7 @@ def chat_with_context(messages: list[dict], profile: str | None = None) -> str:
         formatted.append({"role": m["role"], "content": m["content"]})
 
     response = client.chat.completions.create(
-        model="openai/gpt-oss-120b",
+        model="llama-3.3-70b-versatile",
         messages=formatted,
         temperature=0.9,
         seed=_random_seed(),

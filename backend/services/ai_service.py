@@ -30,7 +30,7 @@ def generate_quiz(topic: str, num_questions: int = 5, difficulty: str = "medium"
     )
 
     response = client.chat.completions.create(
-        model="openai/gpt-oss-120b",
+        model="llama-3.3-70b-versatile",
         messages=[
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": user_prompt},
@@ -60,7 +60,7 @@ def generate_title_from_text(text: str) -> str:
     )
     try:
         response = client.chat.completions.create(
-            model="openai/gpt-oss-120b",
+            model="llama-3.3-70b-versatile",
             messages=[{"role": "user", "content": prompt}],
             temperature=1.0,
             frequency_penalty=0.3,
@@ -92,7 +92,7 @@ Keep the hint to 1-2 sentences. Be concise."""
     )
 
     response = client.chat.completions.create(
-        model="openai/gpt-oss-120b",
+        model="llama-3.3-70b-versatile",
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
@@ -121,7 +121,7 @@ def judge_answer(question_text: str, correct_answer: str, user_answer: str, ques
     )
     try:
         response = client.chat.completions.create(
-            model="openai/gpt-oss-120b",
+            model="llama-3.3-70b-versatile",
             messages=[{"role": "user", "content": prompt}],
             temperature=1.0,
             frequency_penalty=0.1,
@@ -145,7 +145,7 @@ def generate_quiz_from_text(text: str, num_questions: int = 5, difficulty: str =
     )
 
     response = client.chat.completions.create(
-        model="openai/gpt-oss-120b",
+        model="llama-3.3-70b-versatile",
         messages=[
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": user_prompt},
