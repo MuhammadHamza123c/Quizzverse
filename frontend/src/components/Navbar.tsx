@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { supabase } from "@/lib/supabase"
 import { api } from "@/lib/api"
-import { Sparkles, User, LogOut, LayoutDashboard, Brain, FileText, Users, LogIn, Bot, BookOpen, Trophy, Menu, X, ChevronRight } from "lucide-react"
+import { Sparkles, User, LogOut, LayoutDashboard, Brain, FileText, Users, LogIn, Bot, BookOpen, Trophy, RotateCcw, Menu, X, ChevronRight } from "lucide-react"
 
 export default function Sidebar() {
   const [user, setUser] = useState<any>(null)
@@ -47,6 +47,7 @@ export default function Sidebar() {
     { href: "/rooms/create", label: "Create Room", icon: Users },
     { href: "/rooms/join", label: "Join Room", icon: LogIn },
     { href: "/flashcards", label: "Flashcards", icon: BookOpen },
+    { href: "/review", label: "Review", icon: RotateCcw },
     { href: "/achievements", label: "Achievements", icon: Trophy },
     { href: "/chat", label: "Chat", icon: Bot },
   ]
