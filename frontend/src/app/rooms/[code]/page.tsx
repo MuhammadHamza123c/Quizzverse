@@ -841,13 +841,13 @@ function RoomContent() {
           </div>
 
           <div className="flex gap-3 mt-6">
-            <button onClick={handleExport} className="btn-ghost flex items-center justify-center gap-2 py-3 px-4">
-              <Download className="w-4 h-4" /> Export
+            <button onClick={handleExport} className="btn-ghost flex-1 flex items-center justify-center gap-2 py-3">
+              <Download className="w-4 h-4" /> Export JSON
             </button>
             <Link href="/dashboard" className="btn-primary flex-1 flex items-center justify-center gap-2 py-3">
               Dashboard
             </Link>
-            <Link href="/rooms/create" className="btn-ghost flex-1 flex items-center justify-center gap-2 py-3">
+            <Link href="/rooms/create" className="btn-secondary flex-1 flex items-center justify-center gap-2 py-3">
               New Room
             </Link>
           </div>
