@@ -11,6 +11,16 @@ import { Bot, Send, Paperclip, Mic, Square, Loader2, FileText, Trash2, Zap, Book
 interface Message {
   role: "user" | "assistant"
   content: string
+  timestamp?: number
+}
+
+function formatTime(ts: number) {
+  const d = new Date(ts)
+  const now = new Date()
+  const diff = now.getTime() - d.getTime()
+  if (diff < 60000) return "just now"
+  if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`
+  return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
 }
 
 const suggestions = [
@@ -64,7 +74,7 @@ export default function ChatPage() {
     }
 
     setInput("")
-    const userMsg: Message = { role: "user" as const, content: text.trim() }
+    const userMsg: Message = { role: "user" as const, content: text.trim(), timestamp: Date.now() }
     setMessages((prev) => [...prev, userMsg])
     setLoading(true)
 
@@ -73,9 +83,9 @@ export default function ChatPage() {
 
     try {
       const res = await api.chat.message({ messages: apiMessages, profile: profileStr || undefined })
-      setMessages((prev) => [...prev, { role: "assistant", content: res.response }])
+      setMessages((prev) => [...prev, { role: "assistant", content: res.response, timestamp: Date.now() }])
     } catch {
-      setMessages((prev) => [...prev, { role: "assistant", content: "Sorry, I couldn't process that. Please try again." }])
+      setMessages((prev) => [...prev, { role: "assistant", content: "Sorry, I couldn't process that. Please try again.", timestamp: Date.now() }])
     }
     setLoading(false)
   }
@@ -90,7 +100,7 @@ export default function ChatPage() {
     setUploading(true)
     const ext = file.name.split(".").pop()?.toLowerCase() || ""
     const icon = ["png", "jpg", "jpeg", "gif", "webp"].includes(ext) ? "🖼️" : ["mp3", "wav", "m4a", "ogg"].includes(ext) ? "🎤" : "📄"
-    const fileMsg: Message = { role: "user", content: `${icon} Uploaded: ${file.name}${userText ? ` — ${userText}` : ""}` }
+    const fileMsg: Message = { role: "user", content: `${icon} Uploaded: ${file.name}${userText ? ` — ${userText}` : ""}`, timestamp: Date.now() }
     setMessages((prev) => [...prev, fileMsg])
 
     try {
@@ -106,9 +116,9 @@ export default function ChatPage() {
       const profileStr = profile ? Object.entries(profile).filter(([k]) => k !== "id" && k !== "avatar_url" && k !== "created_at" && profile[k]).map(([k, v]) => `${k.replace("_", " ")}: ${v}`).join(" | ") : ""
       const chatMessages = [...messages, fileMsg, { role: "user", content: instruction }]
       const aiRes = await api.chat.message({ messages: chatMessages, profile: profileStr || undefined })
-      setMessages((prev) => [...prev, { role: "assistant", content: aiRes.response }])
+      setMessages((prev) => [...prev, { role: "assistant", content: aiRes.response, timestamp: Date.now() }])
     } catch {
-      setMessages((prev) => [...prev, { role: "assistant", content: "Failed to process file." }])
+      setMessages((prev) => [...prev, { role: "assistant", content: "Failed to process file.", timestamp: Date.now() }])
     }
     setLoading(false)
     setUploading(false)
@@ -256,6 +266,11 @@ export default function ChatPage() {
                   </div>
                 ) : (
                   <div className="whitespace-pre-wrap">{msg.content}</div>
+                )}
+                {msg.timestamp && (
+                  <div className={`text-[10px] text-gray-600 mt-1.5 ${msg.role === "user" ? "text-right" : ""}`}>
+                    {formatTime(msg.timestamp)}
+                  </div>
                 )}
               </div>
             </div>
