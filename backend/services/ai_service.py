@@ -55,24 +55,23 @@ def generate_title_from_text(text: str) -> str:
     max_chars = 3000
     trimmed = text[:max_chars]
     prompt = (
-        f"Generate a short quiz title (3-6 words) from this content. "
-        f"Must be specific to the topic:\n\n{trimmed}"
+        f"Generate a short quiz title (3-6 words) specific to this content. "
+        f"Reply with ONLY the title, no quotes, no extra text:\n\n{trimmed}"
     )
     try:
         response = client.chat.completions.create(
             model="openai/gpt-oss-120b",
-            messages=[
-                {"role": "system", "content": "You generate JSON. Reply with {\"title\": \"...\"}"},
-                {"role": "user", "content": prompt},
-            ],
+            messages=[{"role": "user", "content": prompt}],
             temperature=0.3,
-            max_tokens=30,
-            response_format={"type": "json_object"},
+            max_tokens=20,
         )
-        data = json.loads(response.choices[0].message.content)
-        title = data.get("title", "").strip().strip('"').strip("'")
-        return title if title and len(title) > 2 else "Untitled Quiz"
-    except:
+        title = response.choices[0].message.content
+        if not title:
+            return "Untitled Quiz"
+        title = title.strip().strip('"').strip("'").strip(".")
+        return title if len(title) > 2 else "Untitled Quiz"
+    except Exception as e:
+        print(f"[generate_title] Error: {e}")
         return "Untitled Quiz"
 
 
