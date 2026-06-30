@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel
 from db.supabase_client import supabase
 from api.dependencies import get_current_user
 from services.ai_service import generate_quiz, generate_quiz_from_text, generate_title_from_text, extract_fallback_title
@@ -11,7 +11,7 @@ router = APIRouter(prefix="/api/rooms", tags=["Rooms"])
 
 class CreateRoomRequest(BaseModel):
     topic: str
-    num_questions: int = Field(default=10, ge=10, description="Must be at least 10")
+    num_questions: int = 10
     difficulty: str = "medium"
     time_per_question: int = 30
     video_enabled: bool = False
@@ -19,7 +19,7 @@ class CreateRoomRequest(BaseModel):
 class CreateDocumentRoomRequest(BaseModel):
     document_id: str
     room_name: str
-    num_questions: int = Field(default=10, ge=10, description="Must be at least 10")
+    num_questions: int = 10
     difficulty: str = "medium"
     time_per_question: int = 30
     video_enabled: bool = False
@@ -54,6 +54,8 @@ def get_user_display_name(user) -> str:
 
 @router.post("/create")
 async def create_room(req: CreateRoomRequest, user=Depends(get_current_user)):
+    if req.num_questions < 10:
+        raise HTTPException(400, "Number of questions must be at least 10")
     questions_data = generate_quiz(req.topic, req.num_questions, req.difficulty)
     if not questions_data:
         raise HTTPException(500, "Failed to generate quiz questions")
@@ -116,6 +118,8 @@ async def create_room(req: CreateRoomRequest, user=Depends(get_current_user)):
 
 @router.post("/create-from-document")
 async def create_room_from_document(req: CreateDocumentRoomRequest, user=Depends(get_current_user)):
+    if req.num_questions < 10:
+        raise HTTPException(400, "Number of questions must be at least 10")
     document = supabase.table("documents").select("*").eq("id", req.document_id).single().execute()
     if not document.data:
         raise HTTPException(404, "Document not found")
