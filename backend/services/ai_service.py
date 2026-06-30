@@ -188,6 +188,9 @@ def _default_suggestions() -> list[dict]:
         {"label": "Cheat Sheet", "text": "Create a one-page cheat sheet for Python list and dict methods"},
         {"label": "Study Roadmap", "text": "Create a 3-month study roadmap for learning web development"},
     ]
+
+
+def generate_quiz_from_text(text: str, num_questions: int = 5, difficulty: str = "medium"):
     max_chars = 6000
     trimmed_text = text[:max_chars]
 
