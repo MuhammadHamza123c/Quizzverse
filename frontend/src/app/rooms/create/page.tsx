@@ -47,7 +47,7 @@ export default function CreateRoomPage() {
   const [selectedTopic, setSelectedTopic] = useState("")
   const [customTopic, setCustomTopic] = useState("")
   const [roomName, setRoomName] = useState("")
-  const [numQuestions, setNumQuestions] = useState(5)
+  const [numQuestions, setNumQuestions] = useState(10)
   const [difficulty, setDifficulty] = useState("medium")
   const [timePerQuestion, setTimePerQuestion] = useState(30)
   const [videoEnabled, setVideoEnabled] = useState(false)
@@ -383,7 +383,7 @@ export default function CreateRoomPage() {
                       Questions
                     </label>
                     <div className="flex items-center gap-3">
-                      <button type="button" onClick={() => setNumQuestions(Math.max(1, numQuestions - 1))}
+                      <button type="button" onClick={() => setNumQuestions(Math.max(10, numQuestions - 1))}
                         className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/5 hover:border-purple-500/25 hover:bg-purple-500/5 flex items-center justify-center text-lg text-gray-400 hover:text-white transition-all">−</button>
                       <div className="flex-1 text-center">
                         <span className="text-2xl font-bold gradient-text-simple">{numQuestions}</span>

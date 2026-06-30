@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
 from db.supabase_client import supabase
 from api.dependencies import get_current_user
 from services.ai_service import generate_quiz, generate_quiz_from_text, generate_title_from_text, extract_fallback_title
@@ -11,7 +11,7 @@ router = APIRouter(prefix="/api/rooms", tags=["Rooms"])
 
 class CreateRoomRequest(BaseModel):
     topic: str
-    num_questions: int = 5
+    num_questions: int = Field(default=10, ge=10, description="Must be at least 10")
     difficulty: str = "medium"
     time_per_question: int = 30
     video_enabled: bool = False
@@ -19,7 +19,7 @@ class CreateRoomRequest(BaseModel):
 class CreateDocumentRoomRequest(BaseModel):
     document_id: str
     room_name: str
-    num_questions: int = 5
+    num_questions: int = Field(default=10, ge=10, description="Must be at least 10")
     difficulty: str = "medium"
     time_per_question: int = 30
     video_enabled: bool = False
