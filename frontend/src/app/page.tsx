@@ -211,7 +211,7 @@ export default function Home() {
                   A
                 </div>
                 <div>
-                  <div className="font-medium">Alex Chen</div>
+                  <div className="font-medium">Ahmed Raza</div>
                   <div className="text-sm text-gray-500">Computer Science Student</div>
                 </div>
                 <div className="ml-auto flex gap-1">
@@ -263,7 +263,7 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-6">
             <span>&copy; 2026 QuizzVerse. All rights reserved.</span>
-            <span className="text-gray-600 text-sm">Designed &amp; developed by Alex Chen — Pakistani Student</span>
+            <span className="text-gray-600 text-sm">Designed &amp; developed by Hamza</span>
           </div>
         </div>
       </footer>
