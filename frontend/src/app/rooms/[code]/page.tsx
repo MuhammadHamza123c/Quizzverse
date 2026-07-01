@@ -33,9 +33,8 @@ function RoomContent() {
   const [hintLoading, setHintLoading] = useState(false)
   const [copied, setCopied] = useState(false)
   const [showShare, setShowShare] = useState(false)
-  const [reconnectKey, setReconnectKey] = useState(0)
-  const reconnectAttempts = useRef(0)
   const [badgePopup, setBadgePopup] = useState<any>(null)
+  const [reconnectKey, setReconnectKey] = useState(0)
   const [answerPending, setAnswerPending] = useState(false)
   const [showReview, setShowReview] = useState(false)
   const [reviewMode, setReviewMode] = useState(false)
@@ -49,6 +48,8 @@ function RoomContent() {
   const nextQuestionSentRef = useRef(false)
   const answerPendingTimeoutRef = useRef<any>(null)
   const pendingStartRef = useRef(false)
+  const intentionalClose = useRef(false)
+  const reconnectTimer = useRef<any>(null)
 
   const [videoEnabled, setVideoEnabled] = useState(false)
   const videoEnabledRef = useRef(false)
@@ -91,7 +92,6 @@ function RoomContent() {
 
   useEffect(() => {
     if (!room) return
-    if (reconnectAttempts.current >= 10) return
 
     const pid = searchParams.get("participant_id")
     const uid = userRef.current?.id
@@ -102,7 +102,6 @@ function RoomContent() {
 
     ws.current.onopen = () => {
       setConnected(true)
-      reconnectAttempts.current = 0
       if (pendingStartRef.current) {
         pendingStartRef.current = false
         try { ws.current?.send(JSON.stringify({ type: "start_quiz" })) } catch {}
@@ -114,8 +113,12 @@ function RoomContent() {
       setConnected(false)
       setAnswerPending(false)
       if (answerPendingTimeoutRef.current) clearTimeout(answerPendingTimeoutRef.current)
-      reconnectAttempts.current++
-      setTimeout(() => setReconnectKey(k => k + 1), Math.min(2000 * reconnectAttempts.current, 20000))
+      if (intentionalClose.current) { intentionalClose.current = false; return }
+      if (reconnectTimer.current) return
+      reconnectTimer.current = setTimeout(() => {
+        reconnectTimer.current = null
+        setReconnectKey(k => k + 1)
+      }, 2000)
     }
 
     ws.current.onmessage = (event) => {
@@ -189,7 +192,7 @@ function RoomContent() {
       }
     }
 
-    return () => { reconnectAttempts.current = 0; ws.current?.close() }
+    return () => { clearTimeout(reconnectTimer.current); reconnectTimer.current = null; intentionalClose.current = true; ws.current?.close() }
   }, [room, reconnectKey])
 
   useEffect(() => {
