@@ -222,5 +222,8 @@ async def get_room(room_code: str):
         raise HTTPException(404, "Room not found")
     quiz = supabase.table("quizzes").select("title, topic").eq("id", room.data["quiz_id"]).single().execute()
     participants = supabase.table("room_participants").select("*").eq("room_id", room.data["id"]).execute()
+    host_id = room.data.get("host_id")
+    for p in participants.data:
+        p["is_host"] = p.get("user_id") == host_id
     room_data = {**room.data, "topic": quiz.data.get("topic", "") if quiz.data else ""}
     return {"room": room_data, "participants": participants.data}

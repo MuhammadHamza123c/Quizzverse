@@ -88,13 +88,16 @@ class RoomManager:
             host_id = r.data.get("host_id") if r.data else None
         except:
             pass
+        participants = supabase.table("room_participants").select("*").eq("room_id", room_id).execute().data or []
         players = []
-        for uid in connections:
+        for p in participants:
+            uid = p.get("user_id") or p.get("id")
             players.append({
                 "id": uid,
-                "name": names.get(uid, "Player"),
-                "guest_name": names.get(uid, "Player"),
+                "name": p.get("guest_name", "Player"),
+                "guest_name": p.get("guest_name", "Player"),
                 "is_host": uid == host_id,
+                "connected": uid in connections,
             })
         import asyncio
         asyncio.create_task(self.broadcast(room_id, {"type": "player_list", "players": players}))
