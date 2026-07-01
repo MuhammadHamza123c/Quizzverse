@@ -247,8 +247,23 @@ export default function CreateRoomPage() {
             </div>
           )}
 
-          <div className="flex gap-3 justify-center">
-            <button onClick={handleCopy} className="btn-primary flex items-center gap-2">
+          <div className="flex gap-3 justify-center flex-wrap">
+            <button
+              onClick={() => {
+                const url = `${window.location.origin}/rooms/join?code=${createdCode}`
+                if (navigator.share) {
+                  navigator.share({ title: "Join my quiz room!", url }).catch(() => {})
+                } else {
+                  navigator.clipboard.writeText(url)
+                  setCopied(true)
+                  setTimeout(() => setCopied(false), 2000)
+                }
+              }}
+              className="btn-primary flex items-center gap-2"
+            >
+              <Share2 className="w-4 h-4" /> Share
+            </button>
+            <button onClick={handleCopy} className="btn-ghost flex items-center gap-2">
               {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               {copied ? "Copied!" : "Copy Code"}
             </button>

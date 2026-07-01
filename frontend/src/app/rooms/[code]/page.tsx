@@ -571,26 +571,42 @@ function RoomContent() {
 
               {showShare && (
                 <div className="mt-5 pt-5 border-t border-white/10 animate-slide-down">
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="bg-white p-4 rounded-2xl">
-                      <QRCodeSVG value={`${window.location.origin}/rooms/join?code=${room.room_code}`} size={160} />
+                  <div className="flex items-center gap-4">
+                    <div className="bg-white p-3 rounded-xl shrink-0">
+                      <QRCodeSVG value={`${window.location.origin}/rooms/join?code=${room.room_code}`} size={110} />
                     </div>
-                    <div className="w-full bg-white/[0.03] rounded-xl px-4 py-3 flex items-center gap-2 border border-white/5">
-                      <span className="text-xs text-gray-500 truncate flex-1">
-                        {window.location.origin}/rooms/join?code={room.room_code}
-                      </span>
+                    <div className="flex-1 min-w-0 space-y-2">
+                      <div className="w-full bg-white/[0.03] rounded-xl px-3 py-2.5 flex items-center gap-2 border border-white/5">
+                        <span className="text-[11px] text-gray-500 truncate flex-1">
+                          {window.location.origin}/rooms/join?code={room.room_code}
+                        </span>
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(`${window.location.origin}/rooms/join?code=${room.room_code}`)
+                            setCopied(true)
+                            setTimeout(() => setCopied(false), 2000)
+                          }}
+                          className="text-purple-400 hover:text-purple-300 text-xs shrink-0 font-medium"
+                        >
+                          {copied ? "Copied!" : "Copy"}
+                        </button>
+                      </div>
                       <button
                         onClick={() => {
-                          navigator.clipboard.writeText(`${window.location.origin}/rooms/join?code=${room.room_code}`)
-                          setCopied(true)
-                          setTimeout(() => setCopied(false), 2000)
+                          const url = `${window.location.origin}/rooms/join?code=${room.room_code}`
+                          if (navigator.share) {
+                            navigator.share({ title: "Join my quiz room!", url }).catch(() => {})
+                          } else {
+                            navigator.clipboard.writeText(url)
+                            setCopied(true)
+                            setTimeout(() => setCopied(false), 2000)
+                          }
                         }}
-                        className="text-purple-400 hover:text-purple-300 text-sm shrink-0 font-medium"
+                        className="w-full bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 text-xs rounded-xl px-3 py-2 transition-colors flex items-center justify-center gap-2"
                       >
-                        {copied ? "Copied!" : "Copy"}
+                        <Share2 className="w-3.5 h-3.5" /> Share via...
                       </button>
                     </div>
-                    <p className="text-[11px] text-gray-600 text-center">Scan QR or share the link — friends join instantly</p>
                   </div>
                 </div>
               )}
