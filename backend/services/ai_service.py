@@ -1,4 +1,4 @@
-import json
+import json, re, unicodedata, difflib
 from groq import Groq
 from config.settings import GROQ_API_KEY
 
@@ -129,8 +129,28 @@ Keep the hint to 1-2 sentences. Be concise."""
     return response.choices[0].message.content.strip()
 
 
+def _normalize_transliteration(s: str) -> str:
+    s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode("ascii")
+    s = s.lower().strip()
+    subs = {"z": "d", "ph": "f", "q": "k", "x": "ks"}
+    for a, b in subs.items():
+        s = s.replace(a, b)
+    s = re.sub(r"([aeiou])\1+", r"\1", s)
+    s = re.sub(r"(.)\1+", r"\1\1", s)
+    return s
+
 def judge_answer(question_text: str, correct_answer: str, user_answer: str, question_type: str) -> bool:
-    if user_answer.strip().lower() == correct_answer.strip().lower():
+    a = user_answer.strip().lower()
+    c = correct_answer.strip().lower()
+    if a == c:
+        return True
+
+    na = _normalize_transliteration(user_answer)
+    nc = _normalize_transliteration(correct_answer)
+    if na == nc:
+        return True
+    ratio = difflib.SequenceMatcher(None, na, nc).ratio()
+    if ratio >= 0.75:
         return True
 
     prompt = (
