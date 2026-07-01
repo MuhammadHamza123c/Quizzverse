@@ -33,6 +33,8 @@ function RoomContent() {
   const [hintLoading, setHintLoading] = useState(false)
   const [copied, setCopied] = useState(false)
   const [showShare, setShowShare] = useState(false)
+  const [reconnectKey, setReconnectKey] = useState(0)
+  const reconnectAttempts = useRef(0)
   const [badgePopup, setBadgePopup] = useState<any>(null)
   const [answerPending, setAnswerPending] = useState(false)
   const [showReview, setShowReview] = useState(false)
@@ -89,6 +91,7 @@ function RoomContent() {
 
   useEffect(() => {
     if (!room) return
+    if (reconnectAttempts.current >= 10) return
 
     const pid = searchParams.get("participant_id")
     const uid = userRef.current?.id
@@ -99,6 +102,7 @@ function RoomContent() {
 
     ws.current.onopen = () => {
       setConnected(true)
+      reconnectAttempts.current = 0
       if (pendingStartRef.current) {
         pendingStartRef.current = false
         try { ws.current?.send(JSON.stringify({ type: "start_quiz" })) } catch {}
@@ -106,7 +110,13 @@ function RoomContent() {
     }
 
     ws.current.onerror = () => { setAnswerPending(false); if (answerPendingTimeoutRef.current) clearTimeout(answerPendingTimeoutRef.current) }
-    ws.current.onclose = () => { setAnswerPending(false); if (answerPendingTimeoutRef.current) clearTimeout(answerPendingTimeoutRef.current) }
+    ws.current.onclose = () => {
+      setConnected(false)
+      setAnswerPending(false)
+      if (answerPendingTimeoutRef.current) clearTimeout(answerPendingTimeoutRef.current)
+      reconnectAttempts.current++
+      setTimeout(() => setReconnectKey(k => k + 1), Math.min(2000 * reconnectAttempts.current, 20000))
+    }
 
     ws.current.onmessage = (event) => {
       const msg = JSON.parse(event.data)
@@ -179,8 +189,8 @@ function RoomContent() {
       }
     }
 
-    return () => { ws.current?.close() }
-  }, [room])
+    return () => { reconnectAttempts.current = 0; ws.current?.close() }
+  }, [room, reconnectKey])
 
   useEffect(() => {
     if (!currentQ || answerResult) return
