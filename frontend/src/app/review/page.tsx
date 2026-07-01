@@ -227,15 +227,6 @@ export default function ReviewPage() {
                       </span>
                     </div>
                   </div>
-                  {cards.some((c) => !c.reviewed) && (
-                    <button
-                      onClick={() => handleMarkAllReviewed(cards)}
-                      className="flex items-center gap-1.5 text-[11px] text-purple-400 hover:text-purple-300 font-medium px-3 py-1.5 rounded-lg hover:bg-purple-500/10 transition-all"
-                    >
-                      <Sparkles className="w-3 h-3" />
-                      Mark All Reviewed
-                    </button>
-                  )}
                 </div>
 
                 {/* Cards */}
