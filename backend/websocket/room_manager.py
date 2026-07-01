@@ -281,6 +281,7 @@ class RoomManager:
                 if not room_data.data or room_data.data["host_id"] != user_id:
                     await self.send_to(user_id, room_id, {"type": "error", "message": "Only the host can start the quiz"})
                     return
+                supabase.table("rooms").update({"status": "active"}).eq("id", room_id).execute()
                 await self.broadcast(room_id, {"type": "quiz_started"})
             except Exception as e:
                 print(f"[start_quiz] ERROR: {e}")
