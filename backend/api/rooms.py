@@ -75,7 +75,7 @@ async def create_room(req: CreateRoomRequest, user=Depends(get_current_user)):
             "question_text": q["question_text"],
             "question_type": q["question_type"],
             "options": q.get("options"),
-            "correct_answer": q["correct_answer"],
+            "correct_answer": q.get("correct_answer", ""),
             "explanation": q.get("explanation", ""),
             "order_index": i,
         }).execute()
@@ -150,7 +150,7 @@ async def create_room_from_document(req: CreateDocumentRoomRequest, user=Depends
             "question_text": q["question_text"],
             "question_type": q["question_type"],
             "options": q.get("options"),
-            "correct_answer": q["correct_answer"],
+            "correct_answer": q.get("correct_answer", ""),
             "explanation": q.get("explanation", ""),
             "order_index": i,
         }).execute()

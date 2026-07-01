@@ -45,10 +45,22 @@ def generate_quiz(topic: str, num_questions: int = 5, difficulty: str = "medium"
     data = json.loads(content)
 
     if isinstance(data, dict) and "questions" in data:
-        return data["questions"]
-    if isinstance(data, list):
-        return data
-    return [data]
+        questions = data["questions"]
+    elif isinstance(data, list):
+        questions = data
+    else:
+        questions = [data]
+    return [sanitize_question(q) for q in questions if q.get("question_text")]
+
+
+def sanitize_question(q: dict) -> dict:
+    return {
+        "question_text": q.get("question_text", ""),
+        "question_type": q.get("question_type", "mcq"),
+        "options": q.get("options") if q.get("options") else ({"true": "True", "false": "False"} if q.get("question_type") == "true_false" else None),
+        "correct_answer": q.get("correct_answer", ""),
+        "explanation": q.get("explanation", ""),
+    }
 
 
 def generate_title_from_text(text: str) -> str:
@@ -171,7 +183,7 @@ def generate_quiz_from_text(text: str, num_questions: int = 5, difficulty: str =
     data = json.loads(content)
 
     if isinstance(data, dict) and "questions" in data:
-        return data["questions"]
+        return [sanitize_question(q) for q in data["questions"] if q.get("question_text")]
     if isinstance(data, list):
-        return data
-    return [data]
+        return [sanitize_question(q) for q in data if q.get("question_text")]
+    return [sanitize_question(data)]
