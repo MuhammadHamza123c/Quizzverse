@@ -196,12 +196,13 @@ function RoomContent() {
     return () => { clearTimeout(reconnectTimer.current); reconnectTimer.current = null; intentionalClose.current = true; ws.current?.close() }
   }, [room, reconnectKey])
 
-  // Poll room status as fallback for quiz_started
+  // Poll room status + participants as fallback
   useEffect(() => {
     if (gameState !== "waiting" || !code) return
     const interval = setInterval(async () => {
       try {
         const roomData = await api.rooms.get(code as string)
+        if (roomData.participants) setParticipants(roomData.participants)
         if (roomData.room?.status === "active") {
           setGameState("playing")
           if (ws.current?.readyState === WebSocket.OPEN) {
