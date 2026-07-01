@@ -5,7 +5,8 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { api } from "@/lib/api"
 import { supabase } from "@/lib/supabase"
-import { Brain, Sparkles, Loader2, Clock, Atom, Calculator, FlaskConical, Landmark, Microscope, Globe, ScrollText, Lightbulb, Dna, Telescope, Palette, Music, Dumbbell, Leaf, Cpu, HeartPulse, Users, Copy, Check, ArrowLeft, Wrench, Stethoscope, PawPrint, Languages, BookOpen, Bot, Briefcase, Video } from "lucide-react"
+import { Brain, Sparkles, Loader2, Clock, Atom, Calculator, FlaskConical, Landmark, Microscope, Globe, ScrollText, Lightbulb, Dna, Telescope, Palette, Music, Dumbbell, Leaf, Cpu, HeartPulse, Users, Copy, Check, ArrowLeft, Wrench, Stethoscope, PawPrint, Languages, BookOpen, Bot, Briefcase, Video, Share2 } from "lucide-react"
+import { QRCodeSVG } from "qrcode.react"
 
 const TOPICS = [
   { label: "Science", icon: Atom, gradient: "from-cyan-500/10 to-blue-600/5", border: "hover:border-cyan-500/25", text: "text-cyan-400", bg: "bg-cyan-500/10" },
@@ -209,6 +210,41 @@ export default function CreateRoomPage() {
           <div className="text-5xl font-bold tracking-[0.3em] gradient-text py-6 bg-white/[0.03] rounded-xl border border-white/5">
             {createdCode}
           </div>
+
+          {typeof window !== "undefined" && (
+            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-500/15 to-cyan-500/10 flex items-center justify-center">
+                  <Share2 className="w-5 h-5 text-purple-400" />
+                </div>
+                <div className="text-left">
+                  <p className="text-sm font-semibold">Share Invite</p>
+                  <p className="text-xs text-gray-500">Friends scan QR or click link to join</p>
+                </div>
+              </div>
+              <div className="flex flex-col items-center gap-3">
+                <div className="bg-white p-3 rounded-xl">
+                  <QRCodeSVG value={`${window.location.origin}/rooms/join?code=${createdCode}`} size={140} />
+                </div>
+                <div className="w-full bg-white/[0.03] rounded-xl px-4 py-3 flex items-center gap-2 border border-white/5">
+                  <span className="text-xs text-gray-500 truncate flex-1">
+                    {window.location.origin}/rooms/join?code={createdCode}
+                  </span>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(`${window.location.origin}/rooms/join?code=${createdCode}`)
+                      setCopied(true)
+                      setTimeout(() => setCopied(false), 2000)
+                    }}
+                    className="text-purple-400 hover:text-purple-300 text-sm shrink-0 font-medium"
+                  >
+                    {copied ? "Copied!" : "Copy"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="flex gap-3 justify-center">
             <button onClick={handleCopy} className="btn-primary flex items-center gap-2">
               {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
