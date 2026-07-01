@@ -263,7 +263,7 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-6">
             <span>&copy; 2026 QuizzVerse. All rights reserved.</span>
-            <span className="text-gray-600 text-sm">Designed &amp; developed by Hamza</span>
+            <span className="text-gray-600 text-sm">Designed &amp; developed by Alex Chen — Pakistani Student</span>
           </div>
         </div>
       </footer>
