@@ -139,7 +139,12 @@ def judge_answer(question_text: str, correct_answer: str, user_answer: str, ques
         f"Student's answer: {user_answer}\n"
         f"Question type: {question_type}\n\n"
         f"Decide if the student's answer is semantically correct. "
-        f"For fill-in-the-blank, accept synonyms and rephrasing. "
+        f"For fill-in-the-blank, accept:\n"
+        f"- Synonyms and rephrasing\n"
+        f"- Transliteration variants (e.g. 'Ramzan'/'Ramadan', 'Mohammad'/'Muhammad', 'colour'/'color')\n"
+        f"- Minor typos (1-2 character differences)\n"
+        f"- Extra or missing articles/prepositions\n"
+        f"- Same meaning in different wording\n"
         f"Reply with ONLY 'true' or 'false'."
     )
     try:
