@@ -1,6 +1,5 @@
-from fastapi import HTTPException, Header, Request
+from fastapi import HTTPException, Request
 from db.supabase_client import supabase
-from gotrue.errors import AuthApiError, AuthRetryableError
 
 
 async def get_current_user(request: Request):
@@ -15,7 +14,10 @@ async def get_current_user(request: Request):
         if not res.user:
             raise HTTPException(401, "Invalid token")
         return res.user
-    except AuthRetryableError:
-        raise HTTPException(503, "Auth service temporarily unavailable, please try again")
-    except AuthApiError as e:
-        raise HTTPException(401, e.message)
+    except HTTPException:
+        raise
+    except Exception as e:
+        msg = str(e)
+        if "retry" in msg.lower():
+            raise HTTPException(503, "Auth service temporarily unavailable, please try again")
+        raise HTTPException(401, msg)
