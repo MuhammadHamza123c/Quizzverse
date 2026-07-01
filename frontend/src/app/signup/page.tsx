@@ -33,7 +33,7 @@ export default function Signup() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-24">
+    <div className="min-h-screen flex items-center justify-center px-4 py-16 sm:py-24">
       <div className="w-full max-w-md">
         <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-purple-400 mb-8 transition-colors">
           <ArrowLeft className="w-4 h-4" /> Back
@@ -46,7 +46,7 @@ export default function Signup() {
           <p className="text-gray-500 mt-1.5">Join QuizzVerse for free</p>
         </div>
 
-        <form onSubmit={handleSignup} className="card p-8 space-y-5 animate-scale-in">
+        <form onSubmit={handleSignup} className="card p-5 sm:p-8 space-y-5 animate-scale-in">
           {error && (
             <div className="flex items-center gap-3 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 text-red-400 text-sm">
               <span>{error}</span>

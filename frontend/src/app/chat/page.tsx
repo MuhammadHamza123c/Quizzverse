@@ -310,7 +310,7 @@ export default function ChatPage() {
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={uploading}
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 hover:text-purple-400 hover:bg-white/[0.04] transition-all shrink-0 disabled:opacity-30"
+              className="w-10 h-10 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-gray-500 hover:text-purple-400 hover:bg-white/[0.04] transition-all shrink-0 disabled:opacity-30"
             >
               <Paperclip className="w-4 h-4" />
             </button>
@@ -336,7 +336,7 @@ export default function ChatPage() {
             {recording ? (
               <div className="flex items-center gap-1.5 shrink-0">
                 <span className="text-xs text-red-400 font-mono w-7 text-right">{recordTime}s</span>
-                <button onClick={stopRecording} className="w-9 h-9 rounded-xl bg-red-500/12 flex items-center justify-center text-red-400 hover:bg-red-500/20 transition-all animate-pulse">
+                <button onClick={stopRecording} className="w-10 h-10 sm:w-9 sm:h-9 rounded-xl bg-red-500/12 flex items-center justify-center text-red-400 hover:bg-red-500/20 transition-all animate-pulse">
                   <Square className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -344,7 +344,7 @@ export default function ChatPage() {
               <button
                 onClick={startRecording}
                 disabled={loading || uploading}
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 hover:text-rose-400 hover:bg-white/[0.04] transition-all shrink-0 disabled:opacity-30"
+                className="w-10 h-10 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-gray-500 hover:text-rose-400 hover:bg-white/[0.04] transition-all shrink-0 disabled:opacity-30"
               >
                 <Mic className="w-4 h-4" />
               </button>
@@ -353,12 +353,12 @@ export default function ChatPage() {
             <button
               onClick={() => sendMessage()}
               disabled={(!input.trim() && !pendingFile) || loading || uploading}
-              className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center text-white hover:shadow-lg hover:shadow-purple-500/20 transition-all shrink-0 disabled:opacity-30 disabled:hover:shadow-none"
+              className="w-10 h-10 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center text-white hover:shadow-lg hover:shadow-purple-500/20 transition-all shrink-0 disabled:opacity-30 disabled:hover:shadow-none"
             >
               {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
             </button>
           </div>
-          <p className="text-[10px] text-gray-600/60 text-center mt-2">May produce inaccurate information. Verify important facts.</p>
+          <p className="text-[11px] xs:text-xs text-gray-600/60 text-center mt-2">May produce inaccurate information. Verify important facts.</p>
         </div>
       </div>
     </div>

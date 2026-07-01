@@ -77,7 +77,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="flex items-center justify-center gap-8 mt-16 text-sm text-gray-500 animate-fade-in-up-delay-2">
+          <div className="flex items-center justify-center gap-6 sm:gap-8 mt-16 text-sm text-gray-500 animate-fade-in-up-delay-2">
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-emerald-400/60" /> No credit card
             </span>
@@ -94,7 +94,7 @@ export default function Home() {
       
 
       {/* ──────────── Features ──────────── */}
-      <section className="py-24 px-4 relative">
+      <section className="py-16 sm:py-24 px-4 relative">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/8 border border-purple-500/15 text-purple-300 text-xs font-medium mb-4">
@@ -147,7 +147,7 @@ export default function Home() {
               <Link
                 key={i}
                 href={feature.link}
-                className="group relative p-8 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-300 hover:-translate-y-1"
+                className="group relative p-6 sm:p-8 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-300 hover:-translate-y-1"
                 style={{ animation: `fade-in-up 0.5s ease-out ${i * 0.1}s both` }}
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${feature.accent} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[inherit]`} />
@@ -168,7 +168,7 @@ export default function Home() {
       </section>
 
       {/* ──────────── How It Works ──────────── */}
-      <section className="py-24 px-4">
+      <section className="py-16 sm:py-24 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/8 border border-cyan-500/15 text-cyan-300 text-xs font-medium mb-4">
@@ -208,9 +208,9 @@ export default function Home() {
       </section>
 
       {/* ──────────── Testimonial ──────────── */}
-      <section className="py-24 px-4">
+      <section className="py-16 sm:py-24 px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="relative p-10 md:p-14 rounded-3xl border border-white/[0.06] bg-gradient-to-br from-purple-500/[0.02] to-cyan-500/[0.02] overflow-hidden">
+          <div className="relative p-6 sm:p-10 md:p-14 rounded-3xl border border-white/[0.06] bg-gradient-to-br from-purple-500/[0.02] to-cyan-500/[0.02] overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/5 rounded-full blur-[80px]" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-cyan-500/5 rounded-full blur-[60px]" />
             <div className="relative">
@@ -238,7 +238,7 @@ export default function Home() {
       </section>
 
       {/* ──────────── CTA ──────────── */}
-      <section className="py-24 px-4 text-center relative">
+      <section className="py-16 sm:py-24 px-4 text-center relative">
         <div className="absolute inset-0 hero-gradient pointer-events-none" />
         <div className="relative max-w-3xl mx-auto">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400/15 to-yellow-600/10 flex items-center justify-center mx-auto mb-6 border border-amber-400/15">

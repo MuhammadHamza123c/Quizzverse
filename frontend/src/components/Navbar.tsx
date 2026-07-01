@@ -73,7 +73,7 @@ export default function Sidebar() {
         onMouseLeave={() => setHovered(false)}
         className={`fixed left-0 top-0 bottom-0 z-50 flex flex-col glass-strong border-r border-white/5 transition-all duration-300 ${
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-        } ${hovered ? "w-56" : "w-16"}`}
+        } ${mobileOpen || hovered ? "w-56" : "w-16"}`}
       >
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 h-16 pl-2 pr-4 border-b border-white/5 shrink-0">
@@ -81,7 +81,7 @@ export default function Sidebar() {
             <img src="/logo.png" alt="QuizzVerse" className="w-8 h-8 object-contain" />
           </div>
           <span className={`text-lg font-bold gradient-text whitespace-nowrap transition-opacity duration-300 ${
-            hovered ? "opacity-100" : "opacity-0 pointer-events-none"
+            mobileOpen || hovered ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}>
             QuizzVerse
           </span>
@@ -101,10 +101,10 @@ export default function Sidebar() {
                     ? "bg-purple-500/10 text-purple-300"
                     : "text-gray-400 hover:text-gray-200 hover:bg-white/[0.03]"
                 }`}
-                title={!hovered ? link.label : undefined}
+                title={!hovered && !mobileOpen ? link.label : undefined}
               >
                 <link.icon className="w-5 h-5 shrink-0" />
-                <span className={`transition-opacity duration-200 ${hovered ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+                <span className={`transition-opacity duration-200 ${mobileOpen || hovered ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
                   {link.label}
                 </span>
               </Link>
@@ -123,7 +123,7 @@ export default function Sidebar() {
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center shrink-0">
                   <User className="w-4 h-4 text-white" />
                 </div>
-                <div className={`text-left transition-opacity duration-200 ${hovered ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+                <div className={`text-left transition-opacity duration-200 ${mobileOpen || hovered ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
                   <p className="text-sm font-medium text-gray-300 truncate max-w-[120px]">
                     {profile?.full_name || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User"}
                   </p>
@@ -160,12 +160,12 @@ export default function Sidebar() {
               <Link href="/login"
                 className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-400 hover:text-gray-200 hover:bg-white/[0.03] transition-all">
                 <LogIn className="w-5 h-5 shrink-0" />
-                <span className={`transition-opacity duration-200 ${hovered ? "opacity-100" : "opacity-0 pointer-events-none"}`}>Sign In</span>
+                <span className={`transition-opacity duration-200 ${mobileOpen || hovered ? "opacity-100" : "opacity-0 pointer-events-none"}`}>Sign In</span>
               </Link>
               <Link href="/signup"
                 className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all mt-1">
                 <User className="w-5 h-5 shrink-0" />
-                <span className={`transition-opacity duration-200 ${hovered ? "opacity-100" : "opacity-0 pointer-events-none"}`}>Get Started</span>
+                <span className={`transition-opacity duration-200 ${mobileOpen || hovered ? "opacity-100" : "opacity-0 pointer-events-none"}`}>Get Started</span>
               </Link>
             </>
           )}
