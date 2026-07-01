@@ -14,6 +14,12 @@ async function request(path: string, options: RequestInit = {}): Promise<any> {
   if (token) headers["Authorization"] = `Bearer ${token}`
 
   const res = await fetch(`${API_URL}${path}`, { ...options, headers })
+  if (res.status === 401 && !path.startsWith("/api/auth/")) {
+    const { supabase } = await import("./supabase")
+    await supabase.auth.signOut()
+    if (typeof window !== "undefined") window.location.href = "/login"
+    throw new Error("Session expired. Please login again.")
+  }
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: res.statusText }))
     throw new Error(err.detail || "Request failed")
@@ -60,6 +66,12 @@ export const api = {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: formData,
       })
+      if (res.status === 401) {
+        const { supabase } = await import("./supabase")
+        await supabase.auth.signOut()
+        if (typeof window !== "undefined") window.location.href = "/login"
+        throw new Error("Session expired. Please login again.")
+      }
       if (!res.ok) {
         const err = await res.json().catch(() => ({ detail: res.statusText }))
         throw new Error(err.detail || "Upload failed")
@@ -111,6 +123,12 @@ export const api = {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: formData,
       })
+      if (res.status === 401) {
+        const { supabase } = await import("./supabase")
+        await supabase.auth.signOut()
+        if (typeof window !== "undefined") window.location.href = "/login"
+        throw new Error("Session expired. Please login again.")
+      }
       if (!res.ok) {
         const err = await res.json().catch(() => ({ detail: res.statusText }))
         throw new Error(err.detail || "Upload failed")
