@@ -1,16 +1,24 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect, Suspense } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { api } from "@/lib/api"
 import { LogIn, Loader2, ArrowLeft, Users } from "lucide-react"
 
-export default function JoinRoomPage() {
+function JoinRoomContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [roomCode, setRoomCode] = useState("")
   const [guestName, setGuestName] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+
+  useEffect(() => {
+    const codeFromUrl = searchParams.get("code")
+    if (codeFromUrl) {
+      setRoomCode(codeFromUrl.toUpperCase())
+    }
+  }, [searchParams])
 
   const handleJoin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -72,5 +80,13 @@ export default function JoinRoomPage() {
         </form>
       </div>
     </div>
+  )
+}
+
+export default function JoinRoomPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="spinner" /></div>}>
+      <JoinRoomContent />
+    </Suspense>
   )
 }

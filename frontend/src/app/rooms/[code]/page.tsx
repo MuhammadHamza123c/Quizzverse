@@ -7,7 +7,8 @@ import { getWsUrl } from "@/lib/config"
 import { supabase } from "@/lib/supabase"
 import BadgePopup from "@/components/BadgePopup"
 import LiveKitVideo from "@/components/LiveKitVideo"
-import { Users, Trophy, Loader2, Play, Copy, Check, Crown, Clock, Sparkles, Medal, Star, ArrowLeft, Lightbulb, SkipForward, Brain, CheckCircle2, AlertCircle, Video, Grip, Download } from "lucide-react"
+import { Users, Trophy, Loader2, Play, Copy, Check, Crown, Clock, Sparkles, Medal, Star, ArrowLeft, Lightbulb, SkipForward, Brain, CheckCircle2, AlertCircle, Video, Grip, Download, ChevronDown, Share2 } from "lucide-react"
+import { QRCodeSVG } from "qrcode.react"
 import Link from "next/link"
 
 function RoomContent() {
@@ -31,6 +32,7 @@ function RoomContent() {
   const [hintText, setHintText] = useState<string | null>(null)
   const [hintLoading, setHintLoading] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [showShare, setShowShare] = useState(false)
   const [badgePopup, setBadgePopup] = useState<any>(null)
   const [answerPending, setAnswerPending] = useState(false)
   const [showReview, setShowReview] = useState(false)
@@ -513,8 +515,55 @@ function RoomContent() {
                   <p className="mt-2 text-3xl font-semibold">{participants.length}</p>
                 </div>
               </div>
+              </div>
             </div>
-          </div>
+
+          {/* Share Invite */}
+          {typeof window !== "undefined" && (
+            <div className="mt-4 rounded-3xl border border-white/10 bg-white/[0.03] p-5">
+              <button
+                onClick={() => setShowShare(!showShare)}
+                className="w-full flex items-center justify-between"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-500/15 to-cyan-500/10 flex items-center justify-center">
+                    <Share2 className="w-5 h-5 text-purple-400" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-sm font-semibold">Share Invite</p>
+                    <p className="text-xs text-gray-500">Send link or QR code to friends</p>
+                  </div>
+                </div>
+                <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform ${showShare ? "rotate-180" : ""}`} />
+              </button>
+
+              {showShare && (
+                <div className="mt-5 pt-5 border-t border-white/10 animate-slide-down">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="bg-white p-4 rounded-2xl">
+                      <QRCodeSVG value={`${window.location.origin}/rooms/join?code=${room.room_code}`} size={160} />
+                    </div>
+                    <div className="w-full bg-white/[0.03] rounded-xl px-4 py-3 flex items-center gap-2 border border-white/5">
+                      <span className="text-xs text-gray-500 truncate flex-1">
+                        {window.location.origin}/rooms/join?code={room.room_code}
+                      </span>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(`${window.location.origin}/rooms/join?code=${room.room_code}`)
+                          setCopied(true)
+                          setTimeout(() => setCopied(false), 2000)
+                        }}
+                        className="text-purple-400 hover:text-purple-300 text-sm shrink-0 font-medium"
+                      >
+                        {copied ? "Copied!" : "Copy"}
+                      </button>
+                    </div>
+                    <p className="text-[11px] text-gray-600 text-center">Scan QR or share the link — friends join instantly</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="card p-6">
             <div className="flex items-center justify-between mb-5">
