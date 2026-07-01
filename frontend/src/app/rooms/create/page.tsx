@@ -222,24 +222,26 @@ export default function CreateRoomPage() {
                   <p className="text-xs text-gray-500">Friends scan QR or click link to join</p>
                 </div>
               </div>
-              <div className="flex flex-col items-center gap-3">
-                <div className="bg-white p-3 rounded-xl">
-                  <QRCodeSVG value={`${window.location.origin}/rooms/join?code=${createdCode}`} size={140} />
+              <div className="flex items-center gap-4">
+                <div className="bg-white p-3 rounded-xl shrink-0">
+                  <QRCodeSVG value={`${window.location.origin}/rooms/join?code=${createdCode}`} size={110} />
                 </div>
-                <div className="w-full bg-white/[0.03] rounded-xl px-4 py-3 flex items-center gap-2 border border-white/5">
-                  <span className="text-xs text-gray-500 truncate flex-1">
-                    {window.location.origin}/rooms/join?code={createdCode}
-                  </span>
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(`${window.location.origin}/rooms/join?code=${createdCode}`)
-                      setCopied(true)
-                      setTimeout(() => setCopied(false), 2000)
-                    }}
-                    className="text-purple-400 hover:text-purple-300 text-sm shrink-0 font-medium"
-                  >
-                    {copied ? "Copied!" : "Copy"}
-                  </button>
+                <div className="flex-1 min-w-0 space-y-2">
+                  <div className="w-full bg-white/[0.03] rounded-xl px-3 py-2.5 flex items-center gap-2 border border-white/5">
+                    <span className="text-[11px] text-gray-500 truncate flex-1">
+                      {window.location.origin}/rooms/join?code={createdCode}
+                    </span>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(`${window.location.origin}/rooms/join?code=${createdCode}`)
+                        setCopied(true)
+                        setTimeout(() => setCopied(false), 2000)
+                      }}
+                      className="text-purple-400 hover:text-purple-300 text-xs shrink-0 font-medium"
+                    >
+                      {copied ? "Copied!" : "Copy"}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
