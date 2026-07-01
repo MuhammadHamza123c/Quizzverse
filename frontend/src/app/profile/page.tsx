@@ -95,7 +95,7 @@ function ProfileContent() {
               <input type="text" value={form.university} onChange={(e) => setForm({ ...form, university: e.target.value })} className="input-field" placeholder="e.g. FAST University" />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-400 mb-2 flex items-center gap-2">
                   <BookOpen className="w-3.5 h-3.5" /> Department

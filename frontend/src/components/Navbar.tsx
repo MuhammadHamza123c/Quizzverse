@@ -76,7 +76,7 @@ export default function Sidebar() {
         } ${hovered ? "w-56" : "w-16"}`}
       >
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 h-16 px-4 border-b border-white/5 shrink-0">
+        <Link href="/" className="flex items-center gap-3 h-16 pl-2 pr-4 border-b border-white/5 shrink-0">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 overflow-hidden">
             <img src="/logo.png" alt="QuizzVerse" className="w-8 h-8 object-contain" />
           </div>

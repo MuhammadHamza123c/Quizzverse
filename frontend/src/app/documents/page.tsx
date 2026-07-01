@@ -308,7 +308,7 @@ export default function DocumentsPage() {
                   {/* Config + Generate */}
                   <div className="card p-4 bg-white/[0.02] border border-white/5">
                     {/* Stepper controls */}
-                    <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                       <div>
                         <label className="flex items-center gap-2 text-xs font-medium text-gray-500 mb-2.5">
                           <span className="w-4 h-4 rounded-md bg-purple-500/10 flex items-center justify-center text-[10px] text-purple-400 font-bold">#</span>

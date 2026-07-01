@@ -291,7 +291,7 @@ export default function CreateRoomPage() {
               {mode === "topic" && (
                 <div className="space-y-4">
                   <p className="text-sm text-gray-400">Select a topic below to create your room around it.</p>
-                  <div className="grid grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     {TOPICS.map((item) => (
                       <button key={item.label} type="button" onClick={() => setSelectedTopic(item.label)}
                         className={`group rounded-2xl p-4 border text-left transition ${selectedTopic === item.label ? `border-purple-500/50 bg-purple-500/5` : "border-white/10 bg-white/[0.02] hover:border-white/20"}`}>
@@ -376,7 +376,7 @@ export default function CreateRoomPage() {
               )}
 
               <div className="card p-6 space-y-5 bg-white/5 border border-white/10">
-                <div className="grid grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label className="flex items-center gap-2 text-sm font-medium text-gray-400 mb-2.5">
                       <span className="w-5 h-5 rounded-md bg-purple-500/10 flex items-center justify-center text-xs text-purple-400 font-bold">#</span>

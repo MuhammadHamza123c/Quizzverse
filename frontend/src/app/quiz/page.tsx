@@ -532,7 +532,7 @@ export default function QuizPage() {
           {/* Quick Topics */}
           <div>
             <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 block">Quick Topics</label>
-            <div className="grid grid-cols-6 gap-2">
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
               {[
                 { label: "Science", icon: Atom, gradient: "from-cyan-500/10 to-blue-600/5", border: "hover:border-cyan-500/25", text: "text-cyan-400", bg: "bg-cyan-500/10" },
                 { label: "Math", icon: Calculator, gradient: "from-purple-500/10 to-purple-600/5", border: "hover:border-purple-500/25", text: "text-purple-400", bg: "bg-purple-500/10" },
@@ -600,7 +600,7 @@ export default function QuizPage() {
 
               <div className="h-px bg-gradient-to-r from-transparent via-purple-500/10 to-transparent" />
 
-              <div className="grid grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-400 mb-2.5">
                     <span className="w-5 h-5 rounded-md bg-purple-500/10 flex items-center justify-center text-xs text-purple-400 font-bold">#</span>
@@ -708,7 +708,7 @@ export default function QuizPage() {
               <Clock className="w-4 h-4 text-purple-400" />
               <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Recent Quizzes</h2>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {recentQuizzes.slice(0, 6).map((q: any) => (
                 <div key={q.id} className="relative group/card">
                   <Link
