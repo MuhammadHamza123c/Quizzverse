@@ -55,7 +55,7 @@ def generate_title_from_text(text: str) -> str:
     max_chars = 3000
     trimmed = text[:max_chars]
     prompt = (
-        f"Generate a short quiz title (3-6 words) specific to this content. "
+        f"Generate a very short quiz title (2-4 words) specific to this content. "
         f"Reply with ONLY the title, no quotes, no extra text:\n\n{trimmed}"
     )
     try:
@@ -77,10 +77,10 @@ def generate_title_from_text(text: str) -> str:
 
 def extract_fallback_title(text: str) -> str:
     words = text.strip().split()
-    if len(words) >= 4:
-        return " ".join(words[:4]).strip(".,;:!?") + " Quiz"
-    if len(words) >= 2:
-        return " ".join(words[:2]).strip(".,;:!?") + " Quiz"
+    if len(words) >= 3:
+        return " ".join(words[:3]).strip(".,;:!?") + " Quiz"
+    if len(words) >= 1:
+        return " ".join(words[:1]).strip(".,;:!?") + " Quiz"
     return "Untitled Quiz"
 
 
