@@ -159,6 +159,7 @@ function RoomContent() {
         setFillBlankValue("")
         setShowReview(false)
       } else if (msg.type === "answer_result") {
+        if (msg.skipped) return
         if (answerPendingTimeoutRef.current) { clearTimeout(answerPendingTimeoutRef.current); answerPendingTimeoutRef.current = null }
         setAnswerPending(false)
         setAnswerResult(msg)
@@ -381,7 +382,6 @@ function RoomContent() {
 
   const handleSkip = () => {
     if (answerPending || answerResult || !currentQ) return
-    setAnswerResult({ correct: false, skipped: true, correct_answer: "", explanation: "" })
     setAnswerPending(false)
     if (timerRef.current) clearInterval(timerRef.current)
 
@@ -395,6 +395,7 @@ function RoomContent() {
         question_id: currentQ.id,
       }))
     } catch {}
+    handleNextQuestion()
   }
 
   const handleHint = () => {
