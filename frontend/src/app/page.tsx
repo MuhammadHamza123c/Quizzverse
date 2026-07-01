@@ -40,7 +40,7 @@ export default function Home() {
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 animate-fade-in-up-delay-2">
-            {user ? (
+            {user && (
               <Link
                 href="/dashboard"
                 className="group relative inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-lg
@@ -51,18 +51,6 @@ export default function Home() {
                 <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-colors" />
                 <span className="relative">Go to Dashboard</span>
                 <ArrowRight className="relative w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            ) : (
-              <Link
-                href="/signup"
-                className="group relative inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-lg
-                  bg-gradient-to-r from-purple-600 to-cyan-500 text-white
-                  shadow-lg shadow-purple-500/20 hover:shadow-purple-500/35
-                  transition-all duration-300 hover:-translate-y-0.5 overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-colors" />
-                <span className="relative">Get Started Free</span>
-                <Sparkles className="relative w-5 h-5 group-hover:rotate-12 transition-transform" />
               </Link>
             )}
             <Link
